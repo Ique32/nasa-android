@@ -1,4 +1,4 @@
-package com.example.nasa3;
+package com.example.nasa;
 
 import org.junit.Test;
 
