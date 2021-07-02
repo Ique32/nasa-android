@@ -11,11 +11,11 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:background="#000000"
-        android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/oliver" />
+        app:srcCompat="@drawable/oliver"
+        android:contentDescription="@android:string/unknownName"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,4 +1,4 @@
-package com.example.nasa3;
+package com.example.nasa;
 
 import android.content.Context;
 
@@ -21,6 +21,6 @@ public class ExampleInstrumentedTest {
     public void useAppContext() {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
-        assertEquals("com.example.nasa3", appContext.getPackageName());
+        assertEquals("com.example.nasa", appContext.getPackageName());
     }
 }
