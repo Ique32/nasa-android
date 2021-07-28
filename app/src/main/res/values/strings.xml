@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">NASA</string>
+    <string name="ScrollingON">Scrolling ON</string>
+    <string name="ScrollingOFF">Scrolling OFF</string>
 </resources>

@@ -1,4 +1,4 @@
-package com.example.nasa;
+package com.nasaScroll;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
@@ -17,11 +17,13 @@ import com.bumptech.glide.signature.ObjectKey;
 public class MainActivity extends AppCompatActivity {
 
     final int delay = 5000; // ms
-    final String[] urlArray = {"https://services.swpc.noaa.gov/images/animations/ovation/north/latest.jpg",
+    final String[] urlArray = {
+            "https://services.swpc.noaa.gov/images/animations/ovation/north/latest.jpg",
             "https://services.swpc.noaa.gov/images/animations/sdo-hmii/latest.jpg",
             "https://services.swpc.noaa.gov/images/planetary-k-index.gif",
             "https://services.swpc.noaa.gov/images/animations/lasco-c2/latest.jpg",
-            "https://services.swpc.noaa.gov/images/animations/lasco-c3/latest.jpg"};
+            "https://services.swpc.noaa.gov/images/animations/lasco-c3/latest.jpg"
+    };
     ImageView imageView;
     TextView scrollText;
     int currentPicture = 0;
@@ -40,20 +42,17 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        getSupportActionBar().hide();
         Window window = getWindow();
-        window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         getSupportActionBar().hide();
 
         imageView = findViewById(R.id.imageView);
         scrollText = findViewById(R.id.scrollText);
-        scrollText.setText("Scrolling ON");
+        scrollText.setText(R.string.ScrollingON);
         loadPicture(urlArray[0]);
         handleTouchListener(imageView);
-        handler.postDelayed(runnable, delay);
-
+        startRunnable();
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -71,18 +70,32 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onDoubleClick() {
                 runRunnable = !runRunnable;
-                if (!runRunnable) {
-                    scrollText.setText("Scrolling OFF");
-                    handler.removeCallbacks(runnable);
+                if (runRunnable) {
+                    scrollText.setText(R.string.ScrollingON);
+                    startRunnable();
                 } else {
-                    scrollText.setText("Scrolling ON");
-                    handler.postDelayed(runnable, delay);
+                    scrollText.setText(R.string.ScrollingOFF);
+                    stopRunnable();
                 }
             }
         });
     }
 
+    private void stopRunnable() {
+        handler.removeCallbacks(runnable);
+    }
+
+    private void startRunnable() {
+        handler.postDelayed(runnable, delay);
+    }
+
+    private void resetRunnable() {
+        stopRunnable();
+        startRunnable();
+    }
+
     private void handleScrolling(int direction) {
+        resetRunnable();
         currentPicture = currentPicture + direction;
         if (currentPicture == urlArray.length) {
             currentPicture = 0;
