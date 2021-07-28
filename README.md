@@ -3,6 +3,7 @@
 Very simple android app that scrolls NASA auroras predictions and other pictures from their website.
 
 Pitures included in the rotation:
+
 https://services.swpc.noaa.gov/images/animations/ovation/north/latest.jpg
 https://services.swpc.noaa.gov/images/animations/sdo-hmii/latest.jpg
 https://services.swpc.noaa.gov/images/planetary-k-index.gif
