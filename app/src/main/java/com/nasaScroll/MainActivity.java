@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.os.StrictMode;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
@@ -13,6 +14,12 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.signature.ObjectKey;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -22,10 +29,13 @@ public class MainActivity extends AppCompatActivity {
             "https://services.swpc.noaa.gov/images/animations/sdo-hmii/latest.jpg",
             "https://services.swpc.noaa.gov/images/planetary-k-index.gif",
             "https://services.swpc.noaa.gov/images/animations/lasco-c2/latest.jpg",
-            "https://services.swpc.noaa.gov/images/animations/lasco-c3/latest.jpg"
+            "https://services.swpc.noaa.gov/images/animations/lasco-c3/latest.jpg",
+            "https://i.imgur.com/0JntFVC.gif"
     };
+    //https://api.nasa.gov/planetary/apod?api_key=53qeq0jn2AkIhmcs7cLJZiKSkDxvPUgHqEXMJ4NS
     ImageView imageView;
     TextView scrollText;
+    TextView APODText;
     int currentPicture = 0;
     boolean runRunnable = true;
     Handler handler = new Handler(Looper.getMainLooper());
@@ -46,10 +56,14 @@ public class MainActivity extends AppCompatActivity {
         window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         getSupportActionBar().hide();
+        //Don't do this
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
 
         imageView = findViewById(R.id.imageView);
         scrollText = findViewById(R.id.scrollText);
         scrollText.setText(R.string.ScrollingON);
+        APODText = findViewById(R.id.APODText);
         loadPicture(urlArray[0]);
         handleTouchListener(imageView);
         startRunnable();
@@ -101,6 +115,22 @@ public class MainActivity extends AppCompatActivity {
             currentPicture = 0;
         } else if (currentPicture == -1) {
             currentPicture = urlArray.length - 1;
+        }
+        if (currentPicture == 5) {
+            try  {
+                URL url = new URL("https://api.nasa.gov/planetary/apod?api_key=53qeq0jn2AkIhmcs7cLJZiKSkDxvPUgHqEXMJ4NS");
+                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                connection.setRequestProperty("accept", "application/json");
+                InputStream responseStream = connection.getInputStream();
+                ObjectMapper mapper = new ObjectMapper();
+                APOD apod = mapper.readValue(responseStream, APOD.class);
+                urlArray[5] = apod.url;
+                APODText.setText(apod.title);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else {
+            APODText.setText("");
         }
         loadPicture(urlArray[currentPicture]);
     }
